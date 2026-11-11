@@ -1,0 +1,594 @@
+{
+  "id": "LeadIntakeRoute1",
+  "name": "Lead Intake, Scoring & Routing (portfolio sample)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "new-lead",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "9b543bf1-2f02-4dc4-bdec-48dc70e0d481",
+      "name": "Lead Form Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "6b6c8f99-e471-452c-843d-488042696926"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1",
+              "name": "name",
+              "value": "={{ ($json.body.name || '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "a2",
+              "name": "email",
+              "value": "={{ ($json.body.email || '').trim().toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "a3",
+              "name": "phone",
+              "value": "={{ ($json.body.phone || '').replace(/[^0-9+]/g,'') }}",
+              "type": "string"
+            },
+            {
+              "id": "a4",
+              "name": "company",
+              "value": "={{ ($json.body.company || '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "a5",
+              "name": "service",
+              "value": "={{ $json.body.service || 'Not specified' }}",
+              "type": "string"
+            },
+            {
+              "id": "a6",
+              "name": "budget",
+              "value": "={{ Number($json.body.budget || 0) }}",
+              "type": "number"
+            },
+            {
+              "id": "a7",
+              "name": "source",
+              "value": "={{ $json.body.source || 'website' }}",
+              "type": "string"
+            },
+            {
+              "id": "a8",
+              "name": "received_at",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "47492f00-6076-4ffa-947e-fc20b89023bd",
+      "name": "Normalize Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ /^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/.test($json.email) || $json.phone.length >= 10 }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ab375fff-fc4a-4894-bc8b-7ee544384a33",
+      "name": "Valid Contact?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "email",
+              "lookupValue": "={{ $('Normalize Fields').item.json.email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "382141a0-aef6-42a2-8bab-570fd9a7d0eb",
+      "name": "Find Existing Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        660,
+        200
+      ],
+      "alwaysOutputData": true,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c2",
+              "leftValue": "={{ !!$json.email }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "4f79f123-c079-4fc3-a995-01985ba9d465",
+      "name": "Is Duplicate?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const l = $('Normalize Fields').item.json;\nlet score = 0;\nif (l.budget >= 500) score += 40; else if (l.budget >= 150) score += 25; else if (l.budget > 0) score += 10;\nif (l.company) score += 20;\nif (['Dashboard','Reporting automation','SOP pack'].includes(l.service)) score += 20;\nif (l.phone) score += 10;\nif (l.source === 'referral') score += 10;\nconst tier = score >= 60 ? 'hot' : score >= 35 ? 'warm' : 'cold';\nreturn [{ json: { ...l, score, tier, status: 'new' } }];"
+      },
+      "id": "61ccd716-7176-4257-9d39-839152a53aa7",
+      "name": "Score Lead",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tier }}",
+                    "rightValue": "hot",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "hot"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.tier }}",
+                    "rightValue": "warm",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "warm"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "cold"
+        }
+      },
+      "id": "76bf30d7-15c3-44b1-ac7c-9598b3984b21",
+      "name": "Route by Tier",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1320,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "REPLACE_WITH_CHAT_ID",
+        "text": "=🔥 Hot lead ({{ $json.score }}/100)\n{{ $json.name }} — {{ $json.company || 'no company' }}\nService: {{ $json.service }} · Budget: {{ $json.budget }}\n{{ $json.email }} · {{ $json.phone }}\nCall within 1 hour.",
+        "additionalFields": {}
+      },
+      "id": "22461980-a337-4a84-bf02-c87d6d3b114b",
+      "name": "Alert Sales (Hot)",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1560,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Leads",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "5bd1dcb2-c0e8-457d-9aca-9e77fb6fd697",
+      "name": "Add to CRM Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1800,
+        300
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Thanks {{ $json.name.split(' ')[0] }} — we received your request",
+        "emailType": "text",
+        "message": "=Hi {{ $json.name.split(' ')[0] }},\n\nThanks for your request about {{ $json.service }}. We will reply within one working day with next steps.\n\nBest regards",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "2ece3c17-28fa-4c33-9d27-865faf26c86c",
+      "name": "Auto-reply Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        2020,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, tier: $('Score Lead').item.json.tier } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "b08a9b2a-ae56-4ae8-acc7-dc84bfbc1bf6",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2240,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"ok\": true, \"duplicate\": true }",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "92f03f46-78b7-4d68-9046-7aed664cdc7c",
+      "name": "Respond Duplicate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Rejected",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "ff9d8f7f-f403-4cf0-9291-c51019150d14",
+      "name": "Log Rejected Entry",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        660,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={ \"ok\": false, \"error\": \"valid email or phone required\" }",
+        "options": {
+          "responseCode": 422
+        }
+      },
+      "id": "9774418a-af1d-4de1-b8c2-8004a5905a2a",
+      "name": "Respond Invalid",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        880,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lead intake & routing\n1. Form posts to /new-lead\n2. Fields cleaned, contact validated\n3. Duplicate check by email in Google Sheets\n4. Lead scored 0-100 → hot / warm / cold\n5. Hot leads ping sales on Telegram\n6. Every lead logged in the CRM sheet + auto-reply\n\nReplace REPLACE_WITH_SHEET_ID and REPLACE_WITH_CHAT_ID, then connect Google, Gmail and Telegram credentials.",
+        "height": 300,
+        "width": 420
+      },
+      "id": "84ceaccc-e584-4c35-8ea4-545964e5c24f",
+      "name": "Sticky: How it works",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -40,
+        -120
+      ]
+    }
+  ],
+  "connections": {
+    "Lead Form Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Fields": {
+      "main": [
+        [
+          {
+            "node": "Valid Contact?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valid Contact?": {
+      "main": [
+        [
+          {
+            "node": "Find Existing Lead",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Log Rejected Entry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Rejected Entry": {
+      "main": [
+        [
+          {
+            "node": "Respond Invalid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Existing Lead": {
+      "main": [
+        [
+          {
+            "node": "Is Duplicate?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Duplicate?": {
+      "main": [
+        [
+          {
+            "node": "Respond Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Score Lead",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Lead": {
+      "main": [
+        [
+          {
+            "node": "Route by Tier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Tier": {
+      "main": [
+        [
+          {
+            "node": "Alert Sales (Hot)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add to CRM Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add to CRM Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Sales (Hot)": {
+      "main": [
+        [
+          {
+            "node": "Add to CRM Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add to CRM Sheet": {
+      "main": [
+        [
+          {
+            "node": "Auto-reply Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-reply Email": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "errorWorkflow": ""
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

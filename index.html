@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ahmed Hatem Dahi · Operations & Data</title>
+<meta name="description" content="Training operations lead and data analyst. Real programme work and analyses built on real public data, with the files to check them.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#FAF9F6; --paper:#FFFFFF; --ink:#22262A; --muted:#62686E; --line:#E3E0D9;
+  --accent:#2F5D50; --accent-soft:#E7EFEC;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"IBM Plex Serif",Georgia,serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16191B; --paper:#1D2124; --ink:#E6E4DF; --muted:#A3A8AC; --line:#33393D; --accent:#8FC2B1; --accent-soft:#22302B; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#16191B; --paper:#1D2124; --ink:#E6E4DF; --muted:#A3A8AC; --line:#33393D; --accent:#8FC2B1; --accent-soft:#22302B; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:5}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:56px}
+.brand{font-family:var(--serif);font-weight:600;font-size:17px;color:var(--ink);text-decoration:none}
+nav a{color:var(--muted);text-decoration:none;font-size:14px;margin-left:20px}
+nav a:hover{color:var(--ink)}
+.hero{padding-top:72px;padding-bottom:48px}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.4vw,44px);line-height:1.15;margin:0 0 14px;max-width:760px}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:680px;margin:0 0 24px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;font-size:14px;color:var(--muted);margin-bottom:28px}
+.facts b{color:var(--ink);font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-block;padding:9px 16px;border:1px solid var(--line);border-radius:6px;text-decoration:none;color:var(--ink);font-size:14px;background:var(--paper)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#10201B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#10201B}}
+section{padding:56px 0;border-top:1px solid var(--line)}
+section h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 6px}
+section .intro{color:var(--muted);max-width:700px;margin:0 0 28px}
+.case{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:28px}
+.case + .case{margin-top:20px}
+.case h3{font-size:20px;margin:0 0 4px;font-weight:600}
+.meta{font-size:13px;color:var(--muted);margin:0 0 14px}
+.case ul{padding-left:18px;margin:10px 0 14px}
+.case li{margin:3px 0}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.nums div{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg)}
+.nums b{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}
+.nums span{font-size:12.5px;color:var(--muted)}
+.shot{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;display:block}
+.shot img{display:block;width:100%;height:auto}
+.shots{display:grid;gap:12px}
+.links{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px}
+.tag{display:inline-block;font-size:12px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:2px 8px;margin:0 6px 6px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.card .thumb{aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid var(--line);background:#fff}
+.card .thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:16.5px;line-height:1.35;margin:0 0 6px;font-weight:600}
+.card p{font-size:14.5px;margin:0 0 10px}
+.card .src{font-size:12.5px;color:var(--muted);margin-top:auto;padding-top:8px}
+.card .links{margin-top:10px}
+table.more{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+table.more th,table.more td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+table.more th{font-size:12.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+table.more tr:last-child td{border-bottom:0}
+.tbl{overflow-x:auto}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.principles div{border-top:2px solid var(--accent);padding-top:12px}
+.principles h3{font-size:16px;margin:0 0 6px}
+.principles p{font-size:14.5px;color:var(--muted);margin:0}
+footer{border-top:1px solid var(--line);padding:40px 0 56px;font-size:14px;color:var(--muted)}
+footer .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+@media (max-width:860px){.case{grid-template-columns:1fr;padding:20px}.grid{grid-template-columns:repeat(2,1fr)}.principles{grid-template-columns:1fr}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}nav{display:none}.hero{padding-top:44px;padding-bottom:32px}.nums b{font-size:18px}.nums div{padding:8px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#">Ahmed Hatem Dahi</a>
+  <nav><a href="#operations">Operations</a><a href="#analyses">Analyses</a><a href="#documents">Documents</a><a href="#contact">Contact</a></nav>
+</div></header>
+
+<main>
+<div class="wrap hero">
+  <h1>I run training programmes and turn their data into decisions.</h1>
+  <p class="lead">Operations lead and data analyst based in Assiut, Egypt. I plan and run multi-track programmes, write the procedures teams follow, and build the sheets, dashboards and reports that show what is working.</p>
+  <div class="facts">
+    <span><b>14</b> training tracks run in one programme</span>
+    <span><b>258</b> sessions delivered</span>
+    <span><b>18</b> analyses on real public data</span>
+    <span>Arabic · English</span>
+  </div>
+  <div class="btns">
+    <a class="btn primary" href="#operations">See the work</a>
+    <a class="btn" href="https://www.upwork.com/freelancers/~016e5df83c6ea1f996" target="_blank" rel="noopener">Hire on Upwork</a>
+    <a class="btn" href="https://www.linkedin.com/in/ahmed-hatem-dahi-95bab71ba/" target="_blank" rel="noopener">LinkedIn</a>
+  </div>
+</div>
+
+<section id="operations"><div class="wrap">
+  <h2>Operations work</h2>
+  <p class="intro">Programmes I ran at IdeaSpace Assiut. Figures are aggregates from the programme's own sheets and reports; no trainee data is shown.</p>
+
+  <article class="case">
+    <div>
+      <h3>Training delivery plan: 14 tracks in 4 batches</h3>
+      <p class="meta">Digital Employment Initiative, Round 2 · Oct 2025 – May 2026 · Operations lead</p>
+      <p>The goal was 400 trainees from 1,750 applicants, with the same trainers, rooms and coordinators shared across every track. I staggered the start dates into four batches so nothing was double-booked.</p>
+      <div class="nums">
+        <div><b>1,750</b><span>applicants</span></div>
+        <div><b>258</b><span>sessions</span></div>
+        <div><b>392</b><span>at first sessions</span></div>
+      </div>
+      <ul>
+        <li>Allocated tracks to batches, coordinators to tracks, Zoom accounts and rooms.</li>
+        <li>Wrote an execution plan per batch with a backup slot per track and a Ramadan schedule.</li>
+        <li>Tracked every session in per-track attendance sheets, with a dashboard comparing registered, confirmed and attending.</li>
+      </ul>
+      <div class="links"><a href="files/Ahmed_Hatem_Training_Delivery_Plan.pdf">Plan (PDF, 2 pages)</a></div>
+    </div>
+    <div class="shots">
+      <a class="shot" href="img/ops_plan_1.jpg"><img src="img/ops_plan_1.jpg" alt="Batch table with sessions and attendance per track" loading="lazy"></a>
+      <a class="shot" href="img/ops_plan_2.jpg"><img src="img/ops_plan_2.jpg" alt="Timeline of four batches and batch 4 confirmations" loading="lazy"></a>
+    </div>
+  </article>
+
+  <article class="case">
+    <div>
+      <h3>Innovation &amp; skills programme: year-end results</h3>
+      <p class="meta">EME programme, Assiut · 2025 · Wrote the year-end report</p>
+      <p>A yearly plan with a target per activity. At year end I wrote the report comparing what was delivered with the plan.</p>
+      <div class="nums">
+        <div><b>49+</b><span>activities</span></div>
+        <div><b>1,007</b><span>beneficiaries</span></div>
+        <div><b>82%</b><span>of plan achieved</span></div>
+      </div>
+      <ul>
+        <li>12 of 12 technical workshops (329 participants) and 16 school and university visits against a target of 15 (415 participants).</li>
+        <li>6 of 8 free courses (159 participants) and 15 Idea Clinic projects.</li>
+        <li>Paid courses and the hackathon did not run; their budget moved to visits and free courses, which had demand.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="tbl"><table class="more">
+        <tr><th>Activity</th><th>Target</th><th>Done</th><th>People</th></tr>
+        <tr><td>Technical workshops</td><td>12</td><td>12</td><td>329</td></tr>
+        <tr><td>School &amp; university visits</td><td>15</td><td>16</td><td>415</td></tr>
+        <tr><td>Free courses (2–3 weeks)</td><td>8</td><td>6</td><td>159</td></tr>
+        <tr><td>Idea Clinic</td><td>15</td><td>15</td><td>15 projects</td></tr>
+        <tr><td>Paid courses</td><td>8</td><td>0</td><td>—</td></tr>
+        <tr><td>Hackathon</td><td>2</td><td>0</td><td>—</td></tr>
+      </table></div>
+    </div>
+  </article>
+</div></section>
+
+<section id="analyses"><div class="wrap">
+  <h2>Analyses on real public data</h2>
+  <p class="intro">No demo data. Each project starts from a published dataset, names its source and licence, and comes with the Excel file so you can check every number.</p>
+
+  <div class="grid">
+    <article class="card"><a class="thumb" href="img/p01.jpg"><img src="img/p01.jpg" alt="Learner dropout dashboard" loading="lazy"></a><div class="body">
+      <span><span class="tag">Education</span><span class="tag">Retention</span></span>
+      <h3>Learner dropout early warning</h3>
+      <p>Learners who skip the first assessment complete under 5% of the time, against 66% for on-time submitters. A week-4 rule flags the at-risk quarter.</p>
+      <div class="src">Open University (OULAD), 32,593 enrolments · CC BY 4.0</div>
+      <div class="links"><a href="files/OULAD_Early_Warning_Analysis.xlsx">Excel</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p11.jpg"><img src="img/p11.jpg" alt="IT incident process dashboard" loading="lazy"></a><div class="body">
+      <span><span class="tag">Process</span><span class="tag">Lean</span></span>
+      <h3>Where the time goes in IT incident handling</h3>
+      <p>Incidents with no hand-off stay open 5 days on average; with five or more hand-offs, 44. About 70% of the time is waiting.</p>
+      <div class="src">Volvo IT event log (BPI Challenge 2013), 7,554 incidents</div>
+      <div class="links"><a href="files/Process_Improvement_Incidents.xlsx">Excel</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p08.jpg"><img src="img/p08.jpg" alt="PMO portfolio dashboard" loading="lazy"></a><div class="body">
+      <span><span class="tag">PMO</span><span class="tag">Governance</span></span>
+      <h3>Budget growth and schedule slippage</h3>
+      <p>Tracked projects grew their budgets 37%, and 86% finished later than first promised (median two years).</p>
+      <div class="src">Government of Canada IT projects, 1,126 projects, 2016–2022</div>
+      <div class="links"><a href="files/PMO_Portfolio_Analytics.xlsx">Excel</a><a href="files/IT_Portfolio_Review_Board_Deck.pdf">Board deck (PDF)</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p12.jpg"><img src="img/p12.jpg" alt="M&E results framework dashboard" loading="lazy"></a><div class="body">
+      <span><span class="tag">M&amp;E</span><span class="tag">Indicators</span></span>
+      <h3>Results framework against global targets</h3>
+      <p>56% of countries met the 40% milestone by end-2021; no low-income country met either milestone on time.</p>
+      <div class="src">Our World in Data / WHO milestones, 203 countries · CC BY</div>
+      <div class="links"><a href="files/ME_Results_Framework.xlsx">Excel</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p10.jpg"><img src="img/p10.jpg" alt="Automated monthly report" loading="lazy"></a><div class="body">
+      <span><span class="tag">Reporting</span><span class="tag">Automation</span></span>
+      <h3>Monthly report that updates from one cell</h3>
+      <p>Pick a month and the whole report recalculates, including written commentary and a late-delivery alert.</p>
+      <div class="src">Olist marketplace, 20 months of sales · MIT licence</div>
+      <div class="links"><a href="files/Automated_Monthly_Report.xlsx">Excel</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p18.jpg"><img src="img/p18.jpg" alt="SQL and Power BI delivery dashboard" loading="lazy"></a><div class="body">
+      <span><span class="tag">SQL</span><span class="tag">Power BI</span></span>
+      <h3>Late deliveries drive 1–2 star reviews</h3>
+      <p>Reviews fall from 4.21 on time to 1.69 at 8+ days late; the worst 30% of sellers cause 52% of late orders.</p>
+      <div class="src">Olist, 96,470 delivered orders · star schema, 8 SQL queries, DAX</div>
+      <div class="links"><a href="files/SQL_PowerBI_Olist_Delivery_Case_Study.pdf">Case study (PDF)</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p06.jpg"><img src="img/p06.jpg" alt="Data reconciliation dashboard" loading="lazy"></a><div class="body">
+      <span><span class="tag">Finance ops</span><span class="tag">Controls</span></span>
+      <h3>Three-way reconciliation: orders, items, payments</h3>
+      <p>99.6% matched to the cent; 775 orders were paid but never shipped and need confirmed refunds.</p>
+      <div class="src">Olist, all 99,441 orders · MIT licence</div>
+      <div class="links"><a href="files/Data_Reconciliation.xlsx">Excel (6 MB)</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p04.jpg"><img src="img/p04.jpg" alt="Supply chain control tower" loading="lazy"></a><div class="body">
+      <span><span class="tag">Supply chain</span><span class="tag">SLA</span></span>
+      <h3>Order-to-delivery lead time</h3>
+      <p>Carrier transit is 74% of lead time; a missed seller cut-off raises the late rate from 5% to 21%.</p>
+      <div class="src">Olist, 94,819 delivered orders · MIT licence</div>
+      <div class="links"><a href="files/Supply_Chain_Control_Tower.xlsx">Excel</a></div></div></article>
+
+    <article class="card"><a class="thumb" href="img/p15.jpg"><img src="img/p15.jpg" alt="Customer churn dashboard" loading="lazy"></a><div class="body">
+      <span><span class="tag">Retention</span><span class="tag">Cohorts</span></span>
+      <h3>Who stops buying, and who is about to</h3>
+      <p>Lapse falls from 49% at two orders to 2% at ten or more; 92 overdue regulars flagged for contact.</p>
+      <div class="src">UCI Online Retail, 4,300+ customers · CC BY 4.0</div>
+      <div class="links"><a href="files/Customer_Churn_Retention.xlsx">Excel</a></div></div></article>
+  </div>
+
+  <h3 style="margin:40px 0 12px;font-size:18px">More analyses</h3>
+  <div class="tbl"><table class="more">
+    <tr><th>Project</th><th>Finding</th><th>Data</th><th>File</th></tr>
+    <tr><td>Sales &amp; commercial performance</td><td>10 of 74 categories make 62% of revenue; only 3% of customers reorder.</td><td>Olist, 97,905 orders</td><td><a href="files/Sales_Commercial_Performance.xlsx">Excel</a></td></tr>
+    <tr><td>Executive KPI scorecard</td><td>Orders 8+ days late average 1.7 stars against 4.3 when early.</td><td>Olist, 98,000+ orders</td><td><a href="files/Executive_BI_Command_Center.xlsx">Excel</a></td></tr>
+    <tr><td>Revenue forecast with back-testing</td><td>Latest run-rate beat the trend line: 9% error against 25%.</td><td>Olist monthly revenue</td><td><a href="files/FPA_Revenue_Forecast.xlsx">Excel</a></td></tr>
+    <tr><td>Seller fulfilment performance</td><td>The worst 10% of sellers cause a third of cut-off misses.</td><td>Olist, 788 sellers</td><td><a href="files/Operations_Efficiency_Sellers.xlsx">Excel</a></td></tr>
+    <tr><td>CRM funnel: lead to first sale</td><td>13% of leads close, and about half of won sellers never sell.</td><td>Olist funnel, ~6,000 leads</td><td><a href="files/CRM_Sales_Ops_Funnel.xlsx">Excel</a></td></tr>
+    <tr><td>Retail sales: products and markets</td><td>The top 20% of products bring 78% of revenue.</td><td>UCI Online Retail, 541,909 lines</td><td><a href="files/Retail_Sales_Analysis.xlsx">Excel</a></td></tr>
+    <tr><td>Marketing campaign targeting</td><td>A three-call cap saves about a quarter of calls.</td><td>UCI Bank Marketing, 41,188 clients</td><td><a href="files/Marketing_Campaign_Analysis.xlsx">Excel</a></td></tr>
+    <tr><td>Manufacturing productivity</td><td>Sewing meets target on 83% of days, finishing on 60%.</td><td>UCI garment factory, 1,197 team-days</td><td><a href="files/Manufacturing_Productivity.xlsx">Excel</a></td></tr>
+    <tr><td>Gender pay benchmark</td><td>Within the same occupations women earned about 83% of men's median pay.</td><td>US Census, 522 occupations</td><td><a href="files/HR_Pay_Equity_Benchmark.xlsx">Excel</a></td></tr>
+  </table></div>
+</div></section>
+
+<section id="documents"><div class="wrap">
+  <h2>Procedures and automation</h2>
+  <p class="intro">The documents and workflows behind day-to-day operations.</p>
+  <div class="grid">
+    <article class="card"><a class="thumb" href="img/sop.jpg"><img src="img/sop.jpg" alt="SOP pack cover" loading="lazy"></a><div class="body">
+      <h3>SOP pack: registration and partner reporting</h3>
+      <p>Two full procedures with RACI, process flow, steps with owners and timings, quality checks and KPIs, plus a tracker that flags duplicates and slow follow-up.</p>
+      <div class="links"><a href="files/SOP-OPS-01_Trainee_Registration_and_Onboarding.pdf">SOP 01</a><a href="files/SOP-OPS-02_Monthly_Partner_Donor_Reporting.pdf">SOP 02</a><a href="files/SOP-OPS-01_Registration_Tracker.xlsx">Tracker</a></div></div></article>
+    <article class="card"><a class="thumb" href="img/n8n.jpg"><img src="img/n8n.jpg" alt="n8n workflow cover" loading="lazy"></a><div class="body">
+      <h3>n8n: lead intake, scoring and routing</h3>
+      <p>Webhook, validation, de-duplication, a 0–100 score, Telegram alerts for hot leads, a CRM sheet and an error-alert workflow. Tested by importing into n8n.</p>
+      <div class="links"><a href="files/n8n_Lead_Intake_Case_Study.pdf">Case study</a><a href="files/lead_intake_scoring_routing.json">Workflow JSON</a></div></div></article>
+    <article class="card"><a class="thumb" href="img/deck.jpg"><img src="img/deck.jpg" alt="Board deck cover" loading="lazy"></a><div class="body">
+      <h3>Board deck: IT portfolio review</h3>
+      <p>A 10-slide pre-read on the Canada IT projects data: summary, editable charts, department table and four governance decisions.</p>
+      <div class="links"><a href="files/IT_Portfolio_Review_Board_Deck.pdf">Deck (PDF)</a></div></div></article>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2>How I work</h2>
+  <div class="principles" style="margin-top:20px">
+    <div><h3>Real numbers only</h3><p>Programme figures come from the programme's own sheets. Practice projects use named public datasets, never invented data.</p></div>
+    <div><h3>Files you can check</h3><p>Analyses are built with live formulas, a cleaning log and the source noted, so anyone can trace a number back.</p></div>
+    <div><h3>From finding to action</h3><p>Every piece ends with what to change, who owns it and how to tell if it worked.</p></div>
+  </div>
+</div></section>
+</main>
+
+<footer id="contact"><div class="wrap row">
+  <div><b style="color:var(--ink)">Ahmed Hatem Dahi</b><br>Training operations &amp; data · Assiut, Egypt · Arabic and English</div>
+  <div class="links">
+    <a href="https://www.linkedin.com/in/ahmed-hatem-dahi-95bab71ba/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://www.upwork.com/freelancers/~016e5df83c6ea1f996" target="_blank" rel="noopener">Upwork</a>
+    <a href="https://www.freelancer.com/u/ahmedh0564" target="_blank" rel="noopener">Freelancer</a>
+    <a href="https://contra.com/ahmedhatemei0nvn0o" target="_blank" rel="noopener">Contra</a>
+  </div>
+</div></footer>
+</body>
+</html>
