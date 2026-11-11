@@ -1,0 +1,97 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Late deliveries drive 1–2 star reviews · Ahmed Hatem Dahi</title><meta name="description" content="Olist Brazilian e-commerce (public dataset) · 96,470 delivered orders, Sep 2016 – Aug 2018 · SQL + Power BI">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root{
+  --bg:#FAF9F6; --paper:#FFFFFF; --ink:#22262A; --muted:#62686E; --line:#E3E0D9;
+  --accent:#2F5D50; --accent-soft:#E7EFEC;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"IBM Plex Serif",Georgia,serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#16191B; --paper:#1D2124; --ink:#E6E4DF; --muted:#A3A8AC; --line:#33393D; --accent:#8FC2B1; --accent-soft:#22302B; color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#16191B; --paper:#1D2124; --ink:#E6E4DF; --muted:#A3A8AC; --line:#33393D; --accent:#8FC2B1; --accent-soft:#22302B; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-underline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+header.top{border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:5}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:56px}
+.brand{font-family:var(--serif);font-weight:600;font-size:17px;color:var(--ink);text-decoration:none}
+nav a{color:var(--muted);text-decoration:none;font-size:14px;margin-left:20px}
+nav a:hover{color:var(--ink)}
+.hero{padding-top:72px;padding-bottom:48px}
+.hero h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,4.4vw,44px);line-height:1.15;margin:0 0 14px;max-width:760px}
+.hero p.lead{font-size:18px;color:var(--muted);max-width:680px;margin:0 0 24px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 28px;font-size:14px;color:var(--muted);margin-bottom:28px}
+.facts b{color:var(--ink);font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{display:inline-block;padding:9px 16px;border:1px solid var(--line);border-radius:6px;text-decoration:none;color:var(--ink);font-size:14px;background:var(--paper)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#10201B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#10201B}}
+section{padding:56px 0;border-top:1px solid var(--line)}
+section h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 6px}
+section .intro{color:var(--muted);max-width:700px;margin:0 0 28px}
+.case{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:28px}
+.case + .case{margin-top:20px}
+.case h3{font-size:20px;margin:0 0 4px;font-weight:600}
+.meta{font-size:13px;color:var(--muted);margin:0 0 14px}
+.case ul{padding-left:18px;margin:10px 0 14px}
+.case li{margin:3px 0}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.nums div{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--bg)}
+.nums b{display:block;font-size:22px;font-variant-numeric:tabular-nums;font-weight:600}
+.nums span{font-size:12.5px;color:var(--muted)}
+.shot{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;display:block}
+.shot img{display:block;width:100%;height:auto}
+.shots{display:grid;gap:12px}
+.links{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:14px}
+.tag{display:inline-block;font-size:12px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:2px 8px;margin:0 6px 6px 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.card .thumb{aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid var(--line);background:#fff}
+.card .thumb img{width:100%;height:100%;object-fit:cover;object-position:top}
+.card .body{padding:16px 18px 18px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:16.5px;line-height:1.35;margin:0 0 6px;font-weight:600}
+.card p{font-size:14.5px;margin:0 0 10px}
+.card .src{font-size:12.5px;color:var(--muted);margin-top:auto;padding-top:8px}
+.card .links{margin-top:10px}
+table.more{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+table.more th,table.more td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+table.more th{font-size:12.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+table.more tr:last-child td{border-bottom:0}
+.tbl{overflow-x:auto}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.principles div{border-top:2px solid var(--accent);padding-top:12px}
+.principles h3{font-size:16px;margin:0 0 6px}
+.principles p{font-size:14.5px;color:var(--muted);margin:0}
+footer{border-top:1px solid var(--line);padding:40px 0 56px;font-size:14px;color:var(--muted)}
+footer .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+@media (max-width:860px){.case{grid-template-columns:1fr;padding:20px}.grid{grid-template-columns:repeat(2,1fr)}.principles{grid-template-columns:1fr}}
+@media (max-width:560px){.grid{grid-template-columns:1fr}nav{display:none}.hero{padding-top:44px;padding-bottom:32px}.nums b{font-size:18px}.nums div{padding:8px}}
+
+.cs{max-width:760px;margin:0 auto;padding:48px 20px 72px}
+.cs h1{font-family:var(--serif);font-size:clamp(26px,3.6vw,36px);line-height:1.2;margin:8px 0 10px}
+.cs h2{font-family:var(--serif);font-size:20px;margin:36px 0 8px}
+.cs .back{font-size:14px;text-decoration:none}
+.cs ol,.cs ul{padding-left:20px}.cs li{margin:5px 0}
+.cs pre{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:14px;overflow-x:auto;font-size:13px;line-height:1.5}
+.cs .shot{margin:18px 0}
+</style></head><body>
+<header class="top"><div class="wrap"><a class="brand" href="../">Ahmed Hatem Dahi</a><nav><a href="../#operations">Operations</a><a href="../#analyses">Analyses</a><a href="../#documents">Documents</a><a href="../#contact">Contact</a></nav></div></header>
+<main class="cs"><a class="back" href="../#analyses">← All work</a>
+<h1>Late deliveries drive 1–2 star reviews</h1><p class="meta">Olist Brazilian e-commerce (public dataset) · 96,470 delivered orders, Sep 2016 – Aug 2018 · SQL + Power BI</p><div class="nums"><div><b>4.21 → 1.69</b><span>review, on time vs 8+ days late</span></div><div><b>52%</b><span>of late orders from 30% of sellers</span></div><div><b>19%</b><span>late rate in March 2018</span></div></div>
+<a class="shot" href="../img/p18.jpg"><img src="../img/p18.jpg" alt="Late deliveries drive 1–2 star reviews dashboard"></a>
+<h2>Question</h2><p>What drives bad reviews on a marketplace, and where should operations act first?</p><h2>What I did</h2><p>Loaded 8 raw tables (99,441 orders, 112,650 items, 100,000 reviews, 3,095 sellers) into SQLite and built a star schema: a fact table with one row per delivered order (delivery days, promised days, days late, review), an order-items fact and category and state dimensions. Eight documented queries use CTEs and window functions. The same tables export to CSV with a DAX measure file so the model opens in Power BI.</p><h2>Findings</h2><ol><li>Reviews collapse once an order is late: 4.21 on time, 3.28 at 1–3 days late, 2.09 at 4–7 days and 1.69 at 8+ days. The share of 1–2 star reviews goes from 10% to 79%.</li><li>Lateness is concentrated: among sellers with 50+ orders, the worst 30% produce 52% of late orders. The worst tenth is late 17.2% of the time, the best 0.9%.</li><li>Late rates spike after demand peaks: 12.4% in November 2017 (Black Friday) and 19.0% in March 2018.</li><li>North-east states are late most often and pay the most freight.</li></ol><h2>What to do</h2><ol><li>Seller scorecard: flag the worst decile weekly and require a shipping fix or a longer promised date.</li><li>Peak-season plan: extend promised dates and add carrier capacity before Black Friday and February.</li><li>Set promised dates by state for the north-east instead of one national estimate.</li></ol><h2>Example query</h2><pre>WITH s AS (
+  SELECT i.seller_id, COUNT(DISTINCT f.order_id) AS orders,
+         SUM(f.is_late) AS late_orders, AVG(f.is_late) AS late_rate
+  FROM fact_order_items i JOIN fact_orders f ON f.order_id = i.order_id
+  GROUP BY i.seller_id HAVING COUNT(DISTINCT f.order_id) >= 50),
+ranked AS (SELECT *, NTILE(10) OVER (ORDER BY late_rate DESC) AS decile FROM s)
+SELECT decile, COUNT(*) AS sellers, SUM(orders) AS orders,
+       ROUND(100.0*SUM(late_orders)/SUM(orders),1) AS late_rate_pct
+FROM ranked GROUP BY decile ORDER BY decile;</pre><h2>Files</h2><div class="links"><a href="../files/SQL_PowerBI_Olist_Delivery_Case_Study.pdf">Case study (PDF)</a></div></main>
+<footer><div class="wrap row"><div>Ahmed Hatem Dahi · Training operations &amp; data</div><div class="links"><a href="https://www.linkedin.com/in/ahmed-hatem-dahi-95bab71ba/">LinkedIn</a><a href="https://www.upwork.com/freelancers/~016e5df83c6ea1f996">Upwork</a></div></div></footer>
+</body></html>
